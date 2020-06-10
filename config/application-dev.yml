@@ -4,47 +4,54 @@
 security:
   oauth2:
     client:
-      client-id: shwz_app
-      client-secret: shwz_secret
-      scope: server
+      client-id: ${SHWZ_OATH2_CLIENT_ID:shwz_app}
+      client-secret: ${SHWZ_OATH2_CLIENT_SECRET:shwz_secret}
+      scope: ${SHWZ_OATH2_CLIENT_SCOPE:server}
     resource:
       token-info-uri: http://gdfw.direwolf-auth/oauth/check_token
 
 # redis 相关
 spring:
   redis:
-    host: ${REDIS_URL:172.26.202.82}
-    port: ${REDIS_PORT:36379}
-    password: ${REDIS_PWD:123456}
+    host: ${SHWZ_REDIS_URL:172.26.202.82}
+    port: ${SHWZ_REDIS_PORT:36379}
+    password: ${SHWZ_REDIS_PWD:123456}
   cache:
     type: redis
     redis:
       cache-null-values: true
       time-to-live: 600s
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: ${SHWZ_SERVLET_MaxFileSize:104857600}          ##100M
+      max-request-size: ${SHWZ_SERVLET_MaxRequestSize:104857600}    ##100M
+      file-size-threshold: 0
+      resolve-lazily: false
   # Jackson配置
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
   rabbitmq:
-    host: ${RABBITMQ_URL:172.26.202.82}
-    port: ${RABBITMQ_PORT:35672}
-    username: ${RABBITMQ_USER:admin}
-    password: ${RABBITMQ_PASS:admin} 
+    host: ${SHWZ_RABBITMQ_URL:172.26.202.82}
+    port: ${SHWZ_RABBITMQ_PORT:35672}
+    username: ${SHWZ_RABBITMQ_USER:admin}
+    password: ${SHWZ_RABBITMQ_PASS:admin} 
 #mybatis数据源
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    driver-class-name: ${DB_DRIVER_CLASS:oracle.jdbc.driver.OracleDriver}
-    username: ${DB_USER:SHWZ_ADMIN}
-    password: ${DB_PASS:SHWZ_ADMIN} 
-    url: ${JDBC_URL:jdbc:oracle:thin:@192.168.16.74:1521/orcl}
+    driver-class-name: ${SHWZ_DB_DRIVER_CLASS:oracle.jdbc.driver.OracleDriver}
+    username: ${SHWZ_DB_USER:SHWZ_ADMIN}                                        #direwolf_app
+    password: ${SHWZ_DB_PASS:SHWZ_ADMIN}                                        #Ydmh2020Dev2
+    url: ${SHWZ_JDBC_URL:jdbc:oracle:thin:@192.168.16.74:1521/orcl}             #jdbc:oracle:thin:@172.26.202.83:21522/orcl
     hikari:
-      maximum-pool-size: ${HIKARI_MAX_POOL:10}
-      max-lifetime: ${HIKARI_MAX_LIFE:600000}
-      minimum-idle: ${HIKARI_MIN_IDLE:5}
-      idle-timeout: ${HIKARI_IDLE_TIMEOUT:300000}
-      connection-timeout: ${HIKARI_CONN_TIMEOUT:45000}
-      connection-test-query: ${HIKARI_TEST_QUERY:select 1 from dual}
-      validation-timeout: ${HIKARI_VALIDATE_TIMEOUT:30000}
+      maximum-pool-size: ${SHWZ_HIKARI_MAX_POOL:10}
+      max-lifetime: ${SHWZ_HIKARI_MAX_LIFE:600000}
+      minimum-idle: ${SHWZ_HIKARI_MIN_IDLE:5}
+      idle-timeout: ${SHWZ_HIKARI_IDLE_TIMEOUT:300000}
+      connection-timeout: ${SHWZ_HIKARI_CONN_TIMEOUT:45000}
+      connection-test-query: ${SHWZ_HIKARI_TEST_QUERY:select 1 from dual}
+      validation-timeout: ${SHWZ_HIKARI_VALIDATE_TIMEOUT:30000}
       pool-name: shwz-hikari-pool
   #spring-session-redis配置  
   session:
@@ -132,8 +139,8 @@ mybatis:
     jdbc-type-for-null: 'null'
     map-underscore-to-camel-case: true
     cache-enabled: true
-    ds-name: ${DS_NAME:dataSource}
-    ds-type: ${DS_TYPE:Oracle}
+    ds-name: ${SHWZ_DS_NAME:dataSource}
+    ds-type: ${SHWZ_DS_TYPE:Oracle}
 
 #swagger公共信息
 swagger:
@@ -167,9 +174,6 @@ server:
     io-threads: 32
     worker-threads: 256
 
-      
-
-
 adminPath: /f
 direwolf: 
   app: 
@@ -199,8 +203,7 @@ direwolf:
   jwt: 
     key: direwolf
     expire: 600
-    domain: '*'            
-    
+    domain: '*'   
     
     # 直接放行URL
 ignore:
@@ -213,5 +216,11 @@ ignore:
     - /webjars/**
     - /swagger-resources/**
     
-mytest: ${test}
+erp:
+  username: ${SHWZ_ERP_Username:temp}
+  passwrod: ${SHWZ_ERP_Password:xi123456}
+  webservice-url: ${SHWZ_ERP_WEBSERVICE_URL:http://10.130.24.235:50100/XISOAPAdapter/MessageServlet?channel=:BoWeiWZFZZC_Services:BoWeiWZFZZC_Sender&version=3.0&Sender.Service=BoWeiWZFZZC_Services&Interface=urn%3Asmepc-com%3Awzfz%5EZps18FmGczjPublicReq_MI}
+  webservice-query: ${SHWZ_ERP_WEBSERVICE_QUERY:urn:smepc-com:wzfz}
+  webservice-method: ${SHWZ_ERP_WEBSERVICE_METHOD:Zps18FmGczjPublicReq_MT}
+  webservice-debug: ${SHWZ_ERP_WEBSERVICE_DEBUG:true}
     
