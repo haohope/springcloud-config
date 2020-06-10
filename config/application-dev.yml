@@ -217,7 +217,7 @@ ignore:
     - /swagger-resources/**
     
 erp:
-  username: ${SHWZ_ERP_Username:temp}
+  username: ${SHWZ_ERP_Username:tempkkkkkkkkkkkkkkkkkkk}
   passwrod: ${SHWZ_ERP_Password:xi123456}
   webservice-url: ${SHWZ_ERP_WEBSERVICE_URL:http://10.130.24.235:50100/XISOAPAdapter/MessageServlet?channel=:BoWeiWZFZZC_Services:BoWeiWZFZZC_Sender&version=3.0&Sender.Service=BoWeiWZFZZC_Services&Interface=urn%3Asmepc-com%3Awzfz%5EZps18FmGczjPublicReq_MI}
   webservice-query: ${SHWZ_ERP_WEBSERVICE_QUERY:urn:smepc-com:wzfz}
