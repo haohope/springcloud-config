@@ -1,226 +1,51 @@
-############说明：本配置文件通常情况下应该放到配置中心####################
+#license
+SHWZ_LICENSE_PATH: license.lic
+SHWZ_LICENSE_PUBLIC_CERT_PATH: publiccerts.keystore
 
-## spring security 配置
-security:
-  oauth2:
-    client:
-      client-id: ${SHWZ_OATH2_CLIENT_ID:shwz_app}
-      client-secret: ${SHWZ_OATH2_CLIENT_SECRET:shwz_secret}
-      scope: ${SHWZ_OATH2_CLIENT_SCOPE:server}
-    resource:
-      token-info-uri: http://gdfw.direwolf-auth/oauth/check_token
+#oauth2
+SHWZ_OATH2_CLIENT_ID: shwz_app
+SHWZ_OATH2_CLIENT_SECRET: shwz_secret
+SHWZ_OATH2_CLIENT_SCOPE: server
 
-# redis 相关
-spring:
-  redis:
-    host: ${SHWZ_REDIS_URL:172.26.202.82}
-    port: ${SHWZ_REDIS_PORT:36379}
-    password: ${SHWZ_REDIS_PWD:123456}
-  cache:
-    type: redis
-    redis:
-      cache-null-values: true
-      time-to-live: 600s
-  servlet:
-    multipart:
-      enabled: true
-      max-file-size: ${SHWZ_SERVLET_MaxFileSize:104857600}          ##100M
-      max-request-size: ${SHWZ_SERVLET_MaxRequestSize:104857600}    ##100M
-      file-size-threshold: 0
-      resolve-lazily: false
-  # Jackson配置
-  jackson:
-    time-zone: GMT+8
-    date-format: yyyy-MM-dd HH:mm:ss
-  rabbitmq:
-    host: ${SHWZ_RABBITMQ_URL:172.26.202.82}
-    port: ${SHWZ_RABBITMQ_PORT:35672}
-    username: ${SHWZ_RABBITMQ_USER:admin}
-    password: ${SHWZ_RABBITMQ_PASS:admin} 
-#mybatis数据源
-  datasource:
-    type: com.zaxxer.hikari.HikariDataSource
-    driver-class-name: ${SHWZ_DB_DRIVER_CLASS:oracle.jdbc.driver.OracleDriver}
-    username: ${SHWZ_DB_USER:SHWZ_ADMIN}                                        #direwolf_app
-    password: ${SHWZ_DB_PASS:SHWZ_ADMIN}                                        #Ydmh2020Dev2
-    url: ${SHWZ_JDBC_URL:jdbc:oracle:thin:@192.168.16.74:1521/orcl}             #jdbc:oracle:thin:@172.26.202.83:21522/orcl
-    hikari:
-      maximum-pool-size: ${SHWZ_HIKARI_MAX_POOL:10}
-      max-lifetime: ${SHWZ_HIKARI_MAX_LIFE:600000}
-      minimum-idle: ${SHWZ_HIKARI_MIN_IDLE:5}
-      idle-timeout: ${SHWZ_HIKARI_IDLE_TIMEOUT:300000}
-      connection-timeout: ${SHWZ_HIKARI_CONN_TIMEOUT:45000}
-      connection-test-query: ${SHWZ_HIKARI_TEST_QUERY:select 1 from dual}
-      validation-timeout: ${SHWZ_HIKARI_VALIDATE_TIMEOUT:30000}
-      pool-name: shwz-hikari-pool
-  #spring-session-redis配置  
-  session:
-    store-type: redis      
-  cloud: 
-    bus: 
-      trace: 
-        enabled: true
-# 暴露监控端点
-management:
-  endpoints:
-    web:
-      exposure:
-        include: '*'
-      cors:
-        allowed-origins: "*"
-        allowed-methods: "*"
-  endpoint: 
-    health: 
-      show-details: always
+#redis
+SHWZ_REDIS_URL: 172.26.202.82
+SHWZ_REDIS_PORT: 35672
+SHWZ_RABBITMQ_USER: admin
+SHWZ_RABBITMQ_PASS: admin
 
-# feign 配置
-feign:
-  hystrix:
-    enabled: true
-  okhttp:
-    enabled: false
-  httpclient:
-    enabled: true
-  client:
-    config:
-      default:
-        connectTimeout: 180000
-        readTimeout: 180000
-        loggerLevel: basic
-  compression:
-    request:
-      enabled: true
-    response:
-      enabled: true
-# hystrix If you need to use ThreadLocal bound variables in your RequestInterceptor`s
-# you will need to either set the thread isolation strategy for Hystrix to `SEMAPHORE or disable Hystrix in Feign.
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          strategy: SEMAPHORE
-          thread:
-            timeoutInMilliseconds: 120000
-          semaphore: 
-            maxConcurrentRequests: 200
-        timeout: 
-          enabled: true
-      fallback: 
-        enabled: true
-        isolation: 
-          semaphore: 
-            maxConcurrentRequests: 200 #default 10
-      circuitBreaker: 
-        enabled: true
-        requestVolumeThreshold: 200 #default 10
-  shareSecurityContext: true
-  threadpool: 
-    default: 
-      coreSize: 100 #default 10
-      maxQueueSize: -1 #default -1,SynchronousQueue
+#servlet  上传文件大小控制 100m
+SHWZ_SERVLET_MaxFileSize: 104857600
+SHWZ_SERVLET_MaxRequestSize: 104857600
 
-#请求处理的超时时间
-ribbon:
-  ReadTimeout: 240000
-  ConnectTimeout: 240000
-  OkToRetryOnAllOperations: true #对所有请求都进行重试
-  MaxAutoRetriesNextServer: 2 #切换实例的重试次数
-  MaxAutoRetries: 1 #对当前实例的重试次数
-  
+#rabbitmq
+SHWZ_RABBITMQ_URL: 172.26.202.82
+SHWZ_RABBITMQ_PORT: 35672
+SHWZ_RABBITMQ_USER: admin
+SHWZ_RABBITMQ_PASS: admin
 
-#mybaits配置，修改主键类型，mapper.xml、type 别名等
-mybatis:
-  mapper-locations: 
-    - "classpath:/com/scm/shwz/*Mapper.xml"
-    - "classpath:/com/scm/shwz/**/*Dao.xml"
-  type-aliases-package: com.set.direwolf.sys.mapper,com.set.direwolf.sys.dao,com.set.direwolf.gateway.dao,com.set.direwolf.codegen.persist,com.set.direwolf.platman.dao,com.scm.shwz.**.dao
-  configuration:
-    jdbc-type-for-null: 'null'
-    map-underscore-to-camel-case: true
-    cache-enabled: true
-    ds-name: ${SHWZ_DS_NAME:dataSource}
-    ds-type: ${SHWZ_DS_TYPE:Oracle}
+#db
+SHWZ_DB_DRIVER_CLASS: oracle.jdbc.driver.OracleDriver
+SHWZ_DB_USER: SHWZ_ADMIN
+SHWZ_DB_PASS: SHWZ_ADMIN
+SHWZ_DB_JDBC_URL: oracle:thin:@192.168.16.74:1521/orcl
+SHWZ_DB_DS_NAME: dataSource
+SHWZ_DB_DS_TYPE: Oracle
+SHWZ_HIKARI_MAX_POOL: 10
+SHWZ_HIKARI_MAX_LIFE: 60
+SHWZ_HIKARI_MIN_IDLE: 5
+SHWZ_HIKARI_IDLE_TIMEOUT: 300000
+SHWZ_HIKARI_CONN_TIMEOUT: 45000
+SHWZ_HIKARI_TEST_QUERY: select 1 from dual
+SHWZ_HIKARI_VALIDATE_TIMEOUT: 30000
 
-#swagger公共信息
-swagger:
-  title: PlatformX Swagger API
-  description: Spring Cloud微服务开发脚手架
-  version: 1.7.0
-  license: Powered By PlatformX
-  licenseUrl: https://cloud.com/
-  terms-of-service-url: https://cloud.com/
-  contact:
-    name: Shinenergy
-    email: Shinenergy@gmail.com
-    url: https://cloud.com/about.html
-  authorization:
-    name: PlatformX OAuth
-    auth-regex: ^.*$
-    authorization-scope-list:
-      - scope: server
-        description: server all
-    token-url-list:
-      - http://direwolf-gateway:9999/auth/oauth/token
+#erp
+SHWZ_ERP_Username: temp
+SHWZ_ERP_Password: xi123456
+SHWZ_ERP_WEBSERVICE_URL: http://10.130.24.235:50100/XISOAPAdapter/MessageServlet?channel=:BoWeiWZFZZC_Services:BoWeiWZFZZC_Sender&version=3.0&Sender.Service=BoWeiWZFZZC_Services&Interface=urn%3Asmepc-com%3Awzfz%5EZps18FmGczjPublicReq_MI
+SHWZ_ERP_WEBSERVICE_QUERY: urn:smepc-com:wzfz
+SHWZ_ERP_WEBSERVICE_METHOD: Zps18FmGczjPublicReq_MT
+SHWZ_ERP_WEBSERVICE_DEBUG: true
 
-# log配置
-logging:
-  level:
-    root: info
-    com.scm.shwz: debug
 
-server: 
-  undertow: 
-    io-threads: 32
-    worker-threads: 256
 
-adminPath: /f
-direwolf: 
-  app: 
-    appid: 1
-    appname: Direwolf
-    appver: V1.0.0
-    appdesc: 平台框架初始版本
-    mainpage: home
-    homepattern: 
-  web: 
-    service-url: http://localhost:8080/
-    logout-url: /login
-    static: 
-      url: /shwz/static
-    frontpath: /f
-    view: 
-      index: /a
-    session: 
-      id: sid
-  mail: 
-    host: mail.shineenergy.com
-    port: 25
-    username:
-    password:
-    sendfrom:
-    sendnick:
-  jwt: 
-    key: direwolf
-    expire: 600
-    domain: '*'   
-    
-    # 直接放行URL
-ignore:
-  urls:
-    - /actuator/**
-    - /log/**    
-    - /v2/api-docs
-    - /swagger-ui.html
-    - /doc.html
-    - /webjars/**
-    - /swagger-resources/**
-SHWZ_ERP_Username: 777777777777777777777777777777777777    
-#erp:
-#  username: ${SHWZ_ERP_Username:tempkkkkkkkkkkkkkkkkkkk========}
-#  passwrod: ${SHWZ_ERP_Password:xi123456}
-#  webservice-url: ${SHWZ_ERP_WEBSERVICE_URL:http://10.130.24.235:50100/XISOAPAdapter/MessageServlet?channel=:BoWeiWZFZZC_Services:BoWeiWZFZZC_Sender&version=3.0&Sender.Service=BoWeiWZFZZC_Services&Interface=urn%3Asmepc-com%3Awzfz%5EZps18FmGczjPublicReq_MI}
-#  webservice-query: ${SHWZ_ERP_WEBSERVICE_QUERY:urn:smepc-com:wzfz}
-#  webservice-method: ${SHWZ_ERP_WEBSERVICE_METHOD:Zps18FmGczjPublicReq_MT}
-#  webservice-debug: ${SHWZ_ERP_WEBSERVICE_DEBUG:true}
     
