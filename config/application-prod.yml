@@ -2,6 +2,10 @@
 SHWZ_LICENSE_PATH: license.lic
 SHWZ_LICENSE_PUBLIC_CERT_PATH: publiccerts.keystore
 
+#SHWZ_SERVICE_SYS  
+SHWZ_SERVICE_SYS: scm
+SHWZ_SERVICE_NAMESPACE: scm
+
 #oauth2
 SHWZ_OATH2_CLIENT_ID: shwz_app
 SHWZ_OATH2_CLIENT_SECRET: shwz_secret
@@ -38,13 +42,9 @@ SHWZ_HIKARI_TEST_QUERY: select 1 from dual
 SHWZ_HIKARI_VALIDATE_TIMEOUT: 30000
 
 #erp
-SHWZ_ERP_Username: temp================
+SHWZ_ERP_Username: temp
 SHWZ_ERP_Password: xi123456
 SHWZ_ERP_WEBSERVICE_URL: http://10.130.24.235:50100/XISOAPAdapter/MessageServlet?channel=:BoWeiWZFZZC_Services:BoWeiWZFZZC_Sender&version=3.0&Sender.Service=BoWeiWZFZZC_Services&Interface=urn%3Asmepc-com%3Awzfz%5EZps18FmGczjPublicReq_MI
 SHWZ_ERP_WEBSERVICE_QUERY: urn:smepc-com:wzfz
 SHWZ_ERP_WEBSERVICE_METHOD: Zps18FmGczjPublicReq_MT
-SHWZ_ERP_WEBSERVICE_DEBUG: false
-
-
-
-    
+SHWZ_ERP_WEBSERVICE_DEBUG: true
