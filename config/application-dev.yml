@@ -1,3 +1,6 @@
+SHWZ_EUREKA_IP: 172.26.202.83
+#SHWZ_INSTANCE_IP: 
+
 #license
 SHWZ_LICENSE_PATH: license.lic
 SHWZ_LICENSE_PUBLIC_CERT_PATH: publiccerts.keystore
